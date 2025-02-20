@@ -1,8 +1,23 @@
 import openai
 import random
 
-# OpenAI API Key (Config file se import kar sakte ho)
-OPENAI_API_KEY = "YOUR_OPENAI_API_KEY"
+# ✅ Direct OpenAI API Key
+OPENAI_API_KEY = "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"
+
+openai.api_key = OPENAI_API_KEY
+
+def generate_ai_caption(topic):
+    """AI se ek engaging Instagram caption generate karega."""
+    prompt = f"Generate an engaging Instagram caption about {topic}."
+    
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=prompt,
+        max_tokens=50
+    )
+    
+    return response["choices"][0]["text"].strip()
+
 
 def generate_ai_comment():
     """AI se ek natural aur engaging Instagram comment generate karta hai."""
