@@ -1,10 +1,12 @@
+import os
 import telebot
 from automation.instagram import instagram_login, watch_reels, ai_comment_on_reel
 from automation.database import get_accounts, add_account
 from automation.proxy import get_proxy
 
-TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")  # Load token from environment variable
 bot = telebot.TeleBot(TOKEN)
+
 
 @bot.message_handler(commands=['watch_reels'])
 def watch_reels_command(message):
