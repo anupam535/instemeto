@@ -6,7 +6,7 @@ from automation import (
 from temp_mail import create_instagram
 
 # ✅ Telegram Bot API Token
-TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_API_TOKEN"
+TELEGRAM_BOT_TOKEN = "7604424348:AAHtkmD0YKApTg4B9-QeJNW5SXUmOmctK7E"
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
 # ✅ Command: Start
