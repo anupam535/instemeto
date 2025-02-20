@@ -6,7 +6,7 @@ from automation.proxy import get_proxy
 
 
 # ✅ Direct Telegram Bot Token
-TELEGRAM_BOT_TOKEN = "8060691368:AAHTq4sArzPu5CK3W7ZNLH_bJv6Ri0uiEeM"
+TELEGRAM_BOT_TOKEN = "7604424348:AAHtkmD0YKApTg4B9-QeJNW5SXUmOmctK7E"
 
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
