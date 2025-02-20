@@ -1,61 +1,60 @@
-import os
 import telebot
-from automation.instagram import instagram_login, watch_reels, ai_comment_on_reel
-from automation.database import get_accounts, add_account
-from automation.proxy import get_proxy
+from automation import (
+    auto_likes, auto_comments, auto_followers, auto_reels, auto_dm, trend_detection,
+    proxy_manager, account_manager
+)
+from temp_mail import create_instagram
 
-
-# ✅ Direct Telegram Bot Token
-TELEGRAM_BOT_TOKEN = "7604424348:AAHtkmD0YKApTg4B9-QeJNW5SXUmOmctK7E"
-
+# ✅ Telegram Bot API Token
+TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_API_TOKEN"
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
+# ✅ Command: Start
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "Welcome! AI Instagram Automation Activated.")
+    bot.reply_to(message, "🚀 Instagram Automation Activated! Use /help to see commands.")
 
-bot.polling()
+# ✅ Command: Help (Shows all available commands)
+@bot.message_handler(commands=['help'])
+def show_help(message):
+    commands = """
+    🔹 /boost_likes <post_url> <count> - Mass Auto-Like Posts
+    🔹 /boost_comments <post_url> <count> - AI Smart Commenting
+    🔹 /boost_followers <count> - Auto-Follower Growth
+    🔹 /watch_reels <username> - Auto-Watch Reels
+    🔹 /watch_stories <username> - Auto-Watch Stories
+    🔹 /set_proxy <proxy_url> - Add Proxy
+    🔹 /enable_auto_proxy - Enable Auto Proxy Rotation
+    🔹 /create_account - Auto Create Instagram Account
+    🔹 /switch_account <account_id> - Switch Between Accounts
+    🔹 /trend_detect - Detect Viral Instagram Trends
+    """
+    bot.reply_to(message, commands)
 
-@bot.message_handler(commands=['watch_reels'])
-def watch_reels_command(message):
-    """Watches Instagram reels from all added accounts."""
+# ✅ Command: Boost Likes
+@bot.message_handler(commands=['boost_likes'])
+def boost_likes(message):
     try:
-        reels_url = message.text.split(" ")[1]
-        accounts = get_accounts()
+        _, post_url, count = message.text.split()
+        response = auto_likes.mass_like(post_url, int(count))
+        bot.reply_to(message, f"✅ {response} Likes added!")
+    except:
+        bot.reply_to(message, "❌ Invalid Command! Use: /boost_likes <post_url> <count>")
 
-        if not accounts:
-            bot.reply_to(message, "❌ No Instagram accounts found! Use /add_account first.")
-            return
-
-        for username, password in accounts:
-            proxy = get_proxy()
-            driver = instagram_login(username, password, proxy)
-            watch_reels(driver, reels_url)
-            driver.quit()
-
-        bot.reply_to(message, f"✅ Watched reels at {reels_url} from all accounts!")
-    except IndexError:
-        bot.reply_to(message, "❌ Use: /watch_reels <reels_url>")
-
-@bot.message_handler(commands=['ai_comment'])
-def ai_comment_command(message):
-    """Posts AI-generated comments on a reel."""
+# ✅ Command: Boost Comments
+@bot.message_handler(commands=['boost_comments'])
+def boost_comments(message):
     try:
-        reels_url = message.text.split(" ")[1]
-        accounts = get_accounts()
+        _, post_url, count = message.text.split()
+        response = auto_comments.smart_comment(post_url, int(count))
+        bot.reply_to(message, f"✅ {response} Comments added!")
+    except:
+        bot.reply_to(message, "❌ Invalid Command! Use: /boost_comments <post_url> <count>")
 
-        if not accounts:
-            bot.reply_to(message, "❌ No accounts found! Add one using /add_account.")
-            return
-
-        for username, password in accounts:
-            proxy = get_proxy()
-            driver = instagram_login(username, password, proxy)
-            ai_comment_on_reel(driver, reels_url)
-            driver.quit()
-
-        bot.reply_to(message, f"✅ AI-commented on reel {reels_url} from all accounts!")
-    except IndexError:
-        bot.reply_to(message, "❌ Use: /ai_comment <reels_url>")
+# ✅ Command: Create Instagram Account
+@bot.message_handler(commands=['create_account'])
+def create_account(message):
+    response = create_instagram.create_new_account()
+    bot.reply_to(message, response)
 
 bot.polling()
