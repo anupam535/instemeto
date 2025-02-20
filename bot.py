@@ -4,9 +4,17 @@ from automation.instagram import instagram_login, watch_reels, ai_comment_on_ree
 from automation.database import get_accounts, add_account
 from automation.proxy import get_proxy
 
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")  # Load token from environment variable
-bot = telebot.TeleBot(TOKEN)
 
+# ✅ Direct Telegram Bot Token
+TELEGRAM_BOT_TOKEN = "8060691368:AAHTq4sArzPu5CK3W7ZNLH_bJv6Ri0uiEeM"
+
+bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "Welcome! AI Instagram Automation Activated.")
+
+bot.polling()
 
 @bot.message_handler(commands=['watch_reels'])
 def watch_reels_command(message):
